@@ -18,4 +18,10 @@ public interface ISpielOberflaeche {
   public int getHoeheOberflaeche();
   public void setBreiteOberflaeche( int breite);
   public void setHoeheOberflaeche( int hoehe);
+
+  //Felix
+  public void setLebensEnergie(int e);
+  public void delFood(int index);
+  public void updateFood(int index, int haltbarkeit);
+
 }
