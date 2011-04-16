@@ -57,4 +57,9 @@ public static void main(String args[]) {
     public void zeigeSpielOberflaeche() {
         spielGui.zeigeSpielOberflaeche();
     }
+
+    @Override
+    public void setPosition(int x, int y) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 }

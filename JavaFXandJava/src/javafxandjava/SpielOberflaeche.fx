@@ -21,6 +21,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.control.TextBox;
 import javafx.scene.control.Label;
 import javafx.scene.Group;
+import javafx.animation.*;
+import javafx.animation.transition.*;
 /*
 import javafx.animation.transition.*;
 import javafx.scene.shape.SVGPath;
@@ -44,6 +46,7 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextOrigin;
 import javafx.stage.Stage;
 import java.lang.UnsupportedOperationException;
+import java.awt.Frame;
  */
 
 /**
@@ -51,51 +54,74 @@ import java.lang.UnsupportedOperationException;
  */
 public class SpielOberflaeche extends ISpielOberflaeche {
 
+    override public function updateFood(arg0: Integer, arg1: Integer): Void {
+    //throw new UnsupportedOperationException('Not implemented yet');
+    }
+
+    override public function delFood(arg0: Integer): Void {
+    // throw new UnsupportedOperationException('Not implemented yet');
+    }
+
+    override public function setLebensEnergie(arg0: Integer): Void {
+    // throw new UnsupportedOperationException('Not implemented yet');
+    }
+
     var breiteOberflaeche: Integer = 800;
     var hoeheOberflaeche: Integer = 500;
-    def canvas = Group {};
+    var ei:Ei = Ei{};
+    var frosch: Frosch;
     var futter: Node[] = [];
-
-  var pg: PointGraph = PointGraph{
-    Y: [60,20,90,200,100,300,350,300],
-    color: Color.LIGHTBLUE,
-    CityName: "NewYork,USA"
-};
-    var content: Node[] = [Rectangle {
-                    width: bind breiteOberflaeche
-                    height: bind hoeheOberflaeche
-                    fill: Color.WHITE
-                    var path: Path;
-                    onMousePressed: function(mouse) {
-                        if (mouse.button == MouseButton.SECONDARY) {
-                            println("Right button clicked");
-                            //canvas.content.
-                        }
-                        else
-                        {
-                           pg.addPoint(mouse.x, mouse.y);
-                     /*   path = Path {
-                            stroke: Color.BLUE
-                            strokeWidth: 2
-                            strokeLineCap: StrokeLineCap.ROUND
-                            strokeLineJoin: StrokeLineJoin.ROUND
-                            elements: MoveTo { x: mouse.x y: mouse.y }
-                        }*/
-                        insert path into canvas.content
-                    }
-                    }
-                    onMouseDragged: function(mouse) {
-                        insert LineTo { x: mouse.x y: mouse.y } into path.elements
-                    }
-                },
-                canvas];
-
-
+    var pg: PunktGraph = PunktGraph { };
+    var content: Node[] = [];
+    //   canvas];
     var chartData: PieChart.Data[] = [];
     var spielLogik: ISpielLogik = null;
-    
-//    var cb: JavaTest = new JavaTest();
+    var aniPath:AnimationPath = AnimationPath.createFromPath(Path{elements: bind pg.path.elements});
+    //var anim:PathTransition;
 
+
+
+
+
+
+
+    def bar1 = Rectangle {
+        width: 5
+        height: 50
+        fill: Color.RED
+    };
+
+    def track1 = Path {
+        stroke: Color.BLACK
+        strokeWidth: 4
+        elements: [
+            MoveTo  {
+                x: 50
+                y: 100
+            },
+            LineTo {
+                x: 350
+                y: 100
+            },
+        ]
+    };
+
+
+    def anim = PathTransition {
+        node: frosch
+        path: bind AnimationPath.createFromPath(track1)
+        orientation: OrientationType.NONE
+        interpolator: Interpolator.LINEAR
+        duration: 5s
+        repeatCount: Timeline.INDEFINITE
+    };
+
+
+
+
+
+
+//    var cb: JavaTest = new JavaTest();
     override public function setLogik(logik: ISpielLogik): Void {
         if (spielLogik == null) {
             spielLogik = logik;
@@ -124,7 +150,7 @@ public class SpielOberflaeche extends ISpielOberflaeche {
         }
         pizza.translateX = pX;
         pizza.translateY = pY;
-        insert pizza into content;
+        insert pizza into futter;
     }
 
     override public function getBreiteOberflaeche(): Integer {
@@ -150,7 +176,7 @@ public class SpielOberflaeche extends ISpielOberflaeche {
                     label: l
                     value: v
                     action: function() {
-                        
+
                         println("{labelString} clicked!");
                     }
                 };
@@ -166,17 +192,65 @@ public class SpielOberflaeche extends ISpielOberflaeche {
     }
 
     public override function zeigeSpielOberflaeche(): Void {
-        var chart =
-                PieChart3D {
-                    data: chartData
-                    pieThickness: 25
-                    pieLabelFont: Font { size: 9 };
-                    pieToLabelLineOneLength: 10
-                    pieToLabelLineTwoLength: 20
-                    pieLabelVisible: true
-                    pieValueVisible: true
-                    translateY: -50
+        pg.addPunkt(10, 10);
+        pg.addPunkt(20, 20);
+        var clickOp = 0.0;
+        var clickX = 0.0;
+        var clickY = 0.0;
+        var click: Circle = Circle {
+                    fill: Color.TRANSPARENT
+                    stroke: Color.RED
+                    strokeWidth: 2
+                    radius: 6
+                    opacity: bind clickOp
+                    centerX: bind clickX
+                    centerY: bind clickY
                 };
+        insert Rectangle {
+            width: bind breiteOberflaeche
+            height: bind hoeheOberflaeche
+            fill: Color.rgb(200, 200, 200, 0.01)
+            // var path: Path;
+            onMousePressed: function(mouse) {
+                if (mouse.button == MouseButton.SECONDARY) {
+                    println("Right button clicked");
+                    //canvas.content.
+                    clickOp = 1.0;
+                    clickX = mouse.x;
+                    clickY = mouse.y;
+                    println("rc: {mouse.x}|{mouse.y}");
+                    insert LineTo {
+                        x: clickX
+                        y: clickY
+                    } into track1.elements;
+                } else {
+                    pg.addPunkt(mouse.x, mouse.y);
+                    if(pg.path.elements.size() == 6)
+                    {
+                        ei.opacity = 0.0;
+                        frosch = Frosch{
+                                        translateX: bind pg.tx
+                                        translateY: bind pg.ty
+                                        };
+                        insert frosch into content;
+                        pg.timeline.play();
+                    }
+                    println("lc: {mouse.x}|{mouse.y}");
+                /*   path = Path {
+                stroke: Color.BLUE
+                strokeWidth: 2
+                strokeLineCap: StrokeLineCap.ROUND
+                strokeLineJoin: StrokeLineJoin.ROUND
+                elements: MoveTo { x: mouse.x y: mouse.y }
+                }*/
+                //   insert path into canvas.content
+                }
+            }
+            onMouseDragged: function(mouse) {
+            // insert LineTo { x: mouse.x y: mouse.y } into path.elements
+            }
+        } into content;
+        insert click into content;
 
         var neuesFutterX = TextBox {
                     text: "0"
@@ -217,9 +291,9 @@ public class SpielOberflaeche extends ISpielOberflaeche {
                         }
                     ]
                 };
-        steuerbox.translateX = breiteOberflaeche-100;
+        steuerbox.translateX = breiteOberflaeche - 100;
         insert steuerbox into content;
-          insert Button {
+        insert Button {
             text: "Schließen"
             translateX: 810
             translateY: 0
@@ -227,11 +301,11 @@ public class SpielOberflaeche extends ISpielOberflaeche {
             font: Font { size: 24 name: "Tahoma" }
 
             action: function() {
-                 stage.close();
+                stage.close();
             }
         } into content;
 
-insert pg into content;
+        insert pg into content;
         insert Button {
             text: "Neu"
             translateX: 810
@@ -257,24 +331,42 @@ insert pg into content;
             font: Font { size: 24 name: "Tahoma" }
 
             action: function() {
-                var randI = (Math.random() * (sizeof content - 1)).intValue();
+                var randI = (Math.random() * (sizeof futter - 1)).intValue();
                 var pizza: pizzaUI;
-                pizza = (content.get(randI) as pizzaUI);
+                pizza = (futter.get(randI) as pizzaUI);
                 pizza.starteVerwessung();
                 println("Starte verfaulen Pizza Nr. {randI}");
 
             // futter[randI].starteVerwessung();
             }
         } into content;
+        insert ei into content;
+       // insert frosch into content;
+        insert Group {
+            content: bind futter
+        } into content;
 
-        
-    var stage:Stage = Stage  {
-            style: StageStyle.TRANSPARENT
-            title: "Insert an object on mouse click"
-            scene: Scene {
-                content: bind content
-            }
-        }
+        insert bar1 into content;
+      
+//        def anim = PathTransition {
+//                    path: AnimationPath.createFromPath(pg.path)
+//                    orientation: OrientationType.ORTHOGONAL_TO_TANGENT
+//                    node: frosch
+//                    interpolator: Interpolator.LINEAR
+//                    duration: 8s
+//                    repeatCount: Timeline.INDEFINITE
+//         };
+//         anim.play();
+
+        var stage: Stage = Stage {
+                    style: StageStyle.TRANSPARENT
+                    visible: true
+                    title: "Insert an object on mouse click"
+                    scene: Scene {
+                        fill: null
+                        content: bind content
+                    }
+                }
     }
 
 }
