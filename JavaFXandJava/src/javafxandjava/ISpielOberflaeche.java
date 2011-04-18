@@ -21,7 +21,7 @@ public interface ISpielOberflaeche {
 
   //Felix
   public void setLebensEnergie(int e);
-  public void delFood(int index);
-  public void updateFood(int index, int haltbarkeit);
+  public void delFood(int x, int y);
+//  public void updateFood(int index, int haltbarkeit);
 
 }

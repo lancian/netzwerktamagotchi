@@ -53,12 +53,7 @@ import java.awt.Frame;
  * @author sschmiech
  */
 public class SpielOberflaeche extends ISpielOberflaeche {
-
-    override public function updateFood(arg0: Integer, arg1: Integer): Void {
-    //throw new UnsupportedOperationException('Not implemented yet');
-    }
-
-    override public function delFood(arg0: Integer): Void {
+    override public function delFood(x: Integer, y: Integer): Void {
     // throw new UnsupportedOperationException('Not implemented yet');
     }
 
