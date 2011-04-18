@@ -80,6 +80,7 @@ public class pizzaUI extends FXDNode {
 
     public function getAktuellenWert(): Number {
         return wert * (layer1.opacity - Knochen.opacity);
+
     }
 
     public function starteVerwessung(): Void {
