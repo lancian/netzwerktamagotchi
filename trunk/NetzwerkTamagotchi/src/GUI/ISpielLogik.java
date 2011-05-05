@@ -16,8 +16,8 @@ public interface ISpielLogik {
     public void zeigeSpielOberflaeche();
     public void setBreiteOberflaeche( int breite);
     public void setHoeheOberflaeche( int hoehe);
-    public void setLifepoints(int e, long id);
+    public void setLifepoints(int e, String id);
     public void delFood(int x, int y);
-    public void killTamagotchi(long index);
+    public void killTamagotchi(String index);
     public void setTamagotchi(Tamagotchi tama);
 }
