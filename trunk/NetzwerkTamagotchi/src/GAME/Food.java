@@ -97,12 +97,12 @@ public class Food implements Comparable<Food> {
 
     @Override
     public boolean equals(Object obj) {
-            if ( obj == null || this.getClass() != obj.getClass() ) {
-                    return false;
-            } else {
-                    Food tmp = (Food) obj;
-                    return getFieldX() == tmp.getFieldX() && getFieldY() == tmp.getFieldY();
-            }
+        if ( obj == null || this.getClass() != obj.getClass() ) {
+                return false;
+        } else {
+                Food tmp = (Food) obj;
+                return this.fieldX == tmp.fieldX && this.fieldY == tmp.fieldY;
+        }
     }
 
     @Override
@@ -118,11 +118,11 @@ public class Food implements Comparable<Food> {
 @Override
     public int compareTo(Food o) {
             // TODO Auto-generated method stub
-            int comparison = getFieldX() - o.getFieldX();
+            int comparison = this.fieldX - o.fieldX;
             if(comparison != 0){
                     return comparison;
             }
-            return getFieldY() - o.getFieldY();
+            return this.fieldY - o.fieldY;
     }
 
 }

@@ -7,13 +7,13 @@ import GUI.*;
 public class FoodManager extends Thread {
 	
 	private List<Food> foodList = new ArrayList<Food>();
-//	private List<Food> foodList = Collections.synchronizedList(new ArrayList<Food>());
 
     private int maxFields = 0;
-    private ISpielLogik gui = null;
+    private ISpielLogik logik = null;
 
-	public FoodManager(int fieldsX, int fieldsY, ISpielLogik gui) {
+	public FoodManager(int fieldsX, int fieldsY, ISpielLogik logik) {
             maxFields = (fieldsX + 1)*(fieldsY + 1);
+            this.logik = logik;
 	}
 	
 	@Override
@@ -23,7 +23,7 @@ public class FoodManager extends Thread {
                         if (!tmpFood.checkState()){
                             //löschen
                             foodList.remove(tmpFood);
-                            gui.delFood(tmpFood.getFieldX(), tmpFood.getFieldY());
+                            logik.delFood(tmpFood.getFieldX(), tmpFood.getFieldY());
                         }
                     }
 		}
@@ -45,18 +45,19 @@ public class FoodManager extends Thread {
             return foodList.contains(food);
 	}
 	
-	public Food getFoodToEat(int posX, int posY){
-            int fieldX = posX / 50;
-            int fieldY = posY / 50;
-            synchronized (foodList) {
-                    int search = Collections.binarySearch(foodList, new Food(fieldX,fieldY));
-                    if ( search != -1 ){
-                        Food returnFood = foodList.get(search);
-                        foodList.remove(search);
-                        return returnFood;
-                    } else {
-                        return null;
-                    }
+//	public Food getFoodToEat(int posX, int posY){
+//        int fieldX = posX / 50;
+//        int fieldY = posY / 50;
+    public Food getFoodToEat(int fieldX, int fieldY){
+        synchronized (foodList) {
+                int search = Collections.binarySearch(foodList, new Food(fieldX,fieldY));
+                if ( search != -1 ){
+                    Food returnFood = foodList.get(search);
+                    foodList.remove(search);
+                    return returnFood;
+                } else {
+                    return null;
+                }
             }
 	}
 

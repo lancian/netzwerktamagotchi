@@ -7,13 +7,13 @@ public class FoodCreator extends Thread {
     private int fieldsX = 12;
     private int fieldsY = 9;
     private FoodManager foodMngr = null;
-    private ISpielLogik gui = null;
+    private ISpielLogik logik = null;
 
-    public FoodCreator(int fieldsX, int fieldsY, FoodManager foodMngr, ISpielLogik gui) {
+    public FoodCreator(int fieldsX, int fieldsY, FoodManager foodMngr, ISpielLogik logik) {
         this.fieldsX = fieldsX;
         this.fieldsY = fieldsY;
         this.foodMngr = foodMngr;
-        this.gui = gui;
+        this.logik = logik;
     }
 
     public FoodCreator(int pxX, int pxY, FoodManager foodMngr) {
@@ -37,12 +37,12 @@ public class FoodCreator extends Thread {
                                 tmpFood = new Food(Value, TTL, MHD, posX, posY);
                         } while (foodMngr.containsFood(tmpFood));
                         foodMngr.addFood(tmpFood);
-                        gui.neuesFutter(tmpFood.getPosX(), tmpFood.getPosY(), tmpFood.getMHDinSec());
+                        logik.neuesFutter(tmpFood.getPosX(), tmpFood.getPosY(), tmpFood.getMHDinSec());
                     }
                     try {
 // TODO schlafzeit noch festlegen
                         do {
-                            sleep(1000);
+                            sleep(10000);
                         } while (foodMngr.isFull());
                     } catch (InterruptedException e) {	}
             }
