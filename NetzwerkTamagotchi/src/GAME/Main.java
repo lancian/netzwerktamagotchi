@@ -18,7 +18,7 @@ import java.awt.Toolkit;
  */
 public class Main implements ISpielLogik {
     private ISpielOberflaeche spielGui;
-    private Tamagotchi tama = null;
+    private TamagotchiManager tamaMngr;
     
     public Main()
     {
@@ -35,24 +35,24 @@ public class Main implements ISpielLogik {
     }
 public static void main(String args[]) {
     System.out.println("test");
-    ISpielLogik gui =  new Main();
+    ISpielLogik logik =  new Main();
 
     Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
     // TODO setBreite & setHoehe in gui anpassen
-    gui.setBreiteOberflaeche((int)screen.getWidth());
-    gui.setHoeheOberflaeche((int)screen.getHeight());
-    gui.zeigeSpielOberflaeche();
+    logik.setBreiteOberflaeche((int)screen.getWidth());
+    logik.setHoeheOberflaeche((int)screen.getHeight());
+    logik.zeigeSpielOberflaeche();
 
     int fieldsX = (int)( (screen.getWidth()-100) / 50 - 1 );
     int fieldsY = (int)( screen.getHeight() / 50 - 1 );
 
-    FoodManager foodMngr = new FoodManager(fieldsX, fieldsY, gui);
+    FoodManager foodMngr = new FoodManager(fieldsX, fieldsY, logik);
     foodMngr.start();
-    FoodCreator foodCrtr = new FoodCreator(fieldsX, fieldsY, foodMngr, gui);
-//    foodCrtr.start();
-
-    //ab hier muss noch der tama erzeugt werden.
-    gui.setTamagotchi(new Tamagotchi(foodMngr, gui));
+    FoodCreator foodCrtr = new FoodCreator(fieldsX, fieldsY, foodMngr, logik);
+    foodCrtr.start();
+    TamagotchiManager tamaMngr = new TamagotchiManager(logik, foodMngr);
+    tamaMngr.start();
+    tamaMngr.addTamagotchi(new Tamagotchi());
   }
 
     @Override
@@ -67,24 +67,20 @@ public static void main(String args[]) {
     }
 
     @Override
-    public void setPosition(int x, int y) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
     public void delFood(int x, int y){
         spielGui.delFood(x, y);
     }
 
     @Override
-    public void setLifepoints(int e){
-        spielGui.setLebensEnergie(e);
+    public void setLifepoints(int e, long id){
+        spielGui.setLebensEnergie(e, id);
     }
 
     @Override
     public void setBreiteOberflaeche( int breite){
         spielGui.setBreiteOberflaeche(breite);
     }
+
     @Override
     public void setHoeheOberflaeche( int hoehe){
         spielGui.setHoeheOberflaeche(hoehe);
@@ -93,13 +89,13 @@ public static void main(String args[]) {
     @Override
     public void killTamagotchi(long index){
         spielGui.killTamagotchi(index);
-        tama = null;
-        //netzwerk muss neuen machen
     }
 
     @Override
     public void setTamagotchi(Tamagotchi tama) {
-        this.tama = tama;
+//        braucht man nich, es sei denn netzwerk braucht die funktion
+        //TODO entscheiden ob id reicht oder tama gebraucht wird
+//        tamaMngr.addTamagotchi(tama);
         spielGui.setTamagotchi(tama.getId());
     }
 }

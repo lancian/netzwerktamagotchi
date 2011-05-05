@@ -1,9 +1,10 @@
 package GAME;
-import GUI.*;
 
-public class Tamagotchi {
+public class Tamagotchi implements Comparable<Tamagotchi> {
 
+    //TODO to be defined
     private int healthPoints = 25;
+    private int maxHealthPoints = 100;
 
     public int getHealthPoints() {
             return healthPoints;
@@ -11,23 +12,6 @@ public class Tamagotchi {
 
     public void setHealthPoints(int healthPoints) {
             this.healthPoints = healthPoints;
-    }
-
-    private FoodManager foodMngr = null;
-    private ISpielLogik gui = null;
-
-    /**
-     * @param foodMngr the foodMngr to set
-     */
-    public void setFoodMngr(FoodManager foodMngr) {
-        this.foodMngr = foodMngr;
-    }
-
-    /**
-     * @param gui the gui to set
-     */
-    public void setGui(ISpielLogik gui) {
-        this.gui = gui;
     }
 
     private long id;
@@ -39,32 +23,45 @@ public class Tamagotchi {
         return id;
     }
 
-
-    public Tamagotchi(FoodManager foodMngr, ISpielLogik gui) {
-            this.foodMngr = foodMngr;
-            this.gui = gui;
-            this.id = System.currentTimeMillis();
-    }
-
     public Tamagotchi() {
-            // TODO Auto-generated constructor stub
+        //TODO wahrscheinlich UUID nehmen
+        this.id = System.currentTimeMillis();
     }
 
-    public boolean eatFood(int posX, int posY){
-            Food tmpFood = foodMngr.getFoodToEat(posX, posY);
-            if(tmpFood == null){
+    public Tamagotchi(long id){
+        this.id = id;
+    }
+
+    public boolean eatFood(Food food){
+        healthPoints = healthPoints - food.getFoodValue();
+        if ( healthPoints <= 0 ){
+            return false;
+        } else if ( healthPoints > maxHealthPoints ) {
+            healthPoints = maxHealthPoints;
+        }
+        return true;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if ( obj == null || this.getClass() != obj.getClass() ) {
                 return false;
-            } else {
-                healthPoints = healthPoints - tmpFood.getFoodValue();
-                if ( healthPoints <= 0 ){
-                    gui.killTamagotchi(id);
-                } else {
-                    gui.setLifepoints(healthPoints);
-                    gui.delFood(tmpFood.getFieldX(), tmpFood.getFieldY());
-                }
-
-            }
-            return true;
+        } else {
+                Tamagotchi tmp = (Tamagotchi) obj;
+                return this.id == tmp.id;
+        }
     }
-	
+
+    @Override
+    public int hashCode() {
+        //TODO auf UUID Hash umstellen
+        return (int)this.id;
+    }
+
+    @Override
+    public int compareTo(Tamagotchi t) {
+        //TODO auf UUID umstellen
+        return (int)(this.id - t.id);
+    }
+
 }
