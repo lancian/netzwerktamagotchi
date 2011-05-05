@@ -72,7 +72,7 @@ public static void main(String args[]) {
     }
 
     @Override
-    public void setLifepoints(int e, long id){
+    public void setLifepoints(int e, String id){
         spielGui.setLebensEnergie(e, id);
     }
 
@@ -87,7 +87,7 @@ public static void main(String args[]) {
     }
 
     @Override
-    public void killTamagotchi(long index){
+    public void killTamagotchi(String index){
         spielGui.killTamagotchi(index);
     }
 

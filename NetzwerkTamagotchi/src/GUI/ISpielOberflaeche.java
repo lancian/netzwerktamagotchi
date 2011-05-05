@@ -20,9 +20,9 @@ public interface ISpielOberflaeche {
   public int getHoeheOberflaeche();
   public void setBreiteOberflaeche( int breite);
   public void setHoeheOberflaeche( int hoehe);
-  public void setLebensEnergie(int e, long id);
+  public void setLebensEnergie(int e, String id);
   public void delFood(int x, int y);
-  public void killTamagotchi(long index);
-  public void setTamagotchi(long index);
+  public void killTamagotchi(String index);
+  public void setTamagotchi(String index);
 
 }

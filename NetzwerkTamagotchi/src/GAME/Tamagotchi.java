@@ -1,5 +1,7 @@
 package GAME;
 
+import java.util.UUID;
+
 public class Tamagotchi implements Comparable<Tamagotchi> {
 
     //TODO to be defined
@@ -14,22 +16,21 @@ public class Tamagotchi implements Comparable<Tamagotchi> {
             this.healthPoints = healthPoints;
     }
 
-    private long id;
+    private UUID id;
 
     /**
      * @return the id
      */
-    public long getId() {
-        return id;
+    public String getId() {
+        return id.toString();
     }
 
     public Tamagotchi() {
-        //TODO wahrscheinlich UUID nehmen
-        this.id = System.currentTimeMillis();
+        this.id = UUID.randomUUID();
     }
 
-    public Tamagotchi(long id){
-        this.id = id;
+    public Tamagotchi(String id){
+        this.id = UUID.fromString(id);
     }
 
     public boolean eatFood(Food food){
@@ -54,14 +55,12 @@ public class Tamagotchi implements Comparable<Tamagotchi> {
 
     @Override
     public int hashCode() {
-        //TODO auf UUID Hash umstellen
-        return (int)this.id;
+        return id.hashCode();
     }
 
     @Override
     public int compareTo(Tamagotchi t) {
-        //TODO auf UUID umstellen
-        return (int)(this.id - t.id);
+        return this.id.compareTo(t.id);
     }
 
 }

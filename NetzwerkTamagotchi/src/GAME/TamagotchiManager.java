@@ -30,7 +30,7 @@ public class TamagotchiManager extends Thread {
         logik.setTamagotchi(tama);
     }
 
-    public void eatFood(int fieldX, int fieldY, long id){
+    public void eatFood(int fieldX, int fieldY, String id){
         Food tmpFood = foodMngr.getFoodToEat(fieldX, fieldY);
         if(tmpFood != null){
             synchronized(tamaList){
