@@ -24,5 +24,6 @@ public interface ISpielOberflaeche {
   public void delFood(int x, int y);
   public void killTamagotchi(String index);
   public void setTamagotchi(String index);
+  public void beamTamagotchi(String index);
 
 }

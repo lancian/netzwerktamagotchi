@@ -4,7 +4,7 @@ package GAME;
 public class Food implements Comparable<Food> {
 
     private double startValue = 0;
-    private final double lowLimit = -10;
+    private final double lowLimit = 0.9;
     private long MHD = 0;
     private long TTL = 0;
     private long creation = 0;
@@ -32,16 +32,6 @@ public class Food implements Comparable<Food> {
     public int getFieldY() {
         return fieldY;
     }
-	
-    private int index = 0;
-
-    public int getIndex() {
-            return index;
-    }
-
-    public void setIndex(int index) {
-            this.index = index;
-    }
 
     public int getMHDinSec(){
         return (int) MHD/1000;
@@ -52,13 +42,25 @@ public class Food implements Comparable<Food> {
              this.startValue = Value;
     }
 
-//	TODO nur f�r testzwecke
+    /**
+     * Constructor to search for a food on the given field
+     * @param X Field X
+     * @param Y Field Y
+     */
     public Food(int X, int Y) {
             this.fieldX = X;
             this.fieldY = Y;
     }
 
-    public Food(int Value, long TTL, long MHD, int posX, int posY){
+    /**
+     * Default Constructor
+     * @param Value
+     * @param TTL
+     * @param MHD
+     * @param posX
+     * @param posY
+     */
+    public Food(double Value, long TTL, long MHD, int posX, int posY){
         creation = System.currentTimeMillis();
         this.startValue = Value;
         this.TTL = TTL;
@@ -72,18 +74,17 @@ public class Food implements Comparable<Food> {
             return "Value = " + this.startValue;
     }
 
-    public int getFoodValue(){
+    public double getFoodValue(){
         if (System.currentTimeMillis() >= creation + MHD ){
             if (System.currentTimeMillis() >= creation + 2*MHD){
                 return (int)lowLimit;
             } else {
-                double deterioation = lowLimit / MHD;
-                return (int)((System.currentTimeMillis() - creation - MHD) * deterioation);
+                double deterioation = (1 - lowLimit) / MHD;
+                return ( 1 - (System.currentTimeMillis() - creation - MHD) * deterioation);
             }
         } else {
-
-            double deterioation = (startValue) / MHD;
-            return (int)(startValue - (System.currentTimeMillis() - creation) * deterioation);
+            double deterioation = (startValue - 1) / MHD;
+            return (startValue - (System.currentTimeMillis() - creation) * deterioation);
         }
     }
 
@@ -107,17 +108,11 @@ public class Food implements Comparable<Food> {
 
     @Override
     public int hashCode() {
-//		int tmpPosX = posX; 
-//		for ( int i= 0; i < Math.floor(Math.log10(posY))+1 ; i++ ){
-//			tmpPosX = tmpPosX * 10;
-//		}
-//		return tmpPosX + posY;
             return getFieldX()*100000 + getFieldY();
     }
 
 @Override
     public int compareTo(Food o) {
-            // TODO Auto-generated method stub
             int comparison = this.fieldX - o.fieldX;
             if(comparison != 0){
                     return comparison;
