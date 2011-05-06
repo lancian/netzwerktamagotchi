@@ -5,15 +5,20 @@ import java.util.UUID;
 public class Tamagotchi implements Comparable<Tamagotchi> {
 
     //TODO to be defined
-    private int healthPoints = 25;
+    private int healthPoints = 250;
     private int maxHealthPoints = 100;
 
     public int getHealthPoints() {
             return healthPoints;
     }
 
-    public void setHealthPoints(int healthPoints) {
-            this.healthPoints = healthPoints;
+    public boolean setHealthPoints(int healthPoints) {
+        this.healthPoints = healthPoints;
+        if (healthPoints <= 0) {
+            return false;
+        } else {
+            return true;
+        }
     }
 
     private UUID id;
@@ -25,6 +30,9 @@ public class Tamagotchi implements Comparable<Tamagotchi> {
         return id.toString();
     }
 
+    /**
+     * Default Constructor
+     */
     public Tamagotchi() {
         this.id = UUID.randomUUID();
     }
@@ -34,7 +42,7 @@ public class Tamagotchi implements Comparable<Tamagotchi> {
     }
 
     public boolean eatFood(Food food){
-        healthPoints = healthPoints - food.getFoodValue();
+        healthPoints = (int)( healthPoints * food.getFoodValue() );
         if ( healthPoints <= 0 ){
             return false;
         } else if ( healthPoints > maxHealthPoints ) {
@@ -61,6 +69,15 @@ public class Tamagotchi implements Comparable<Tamagotchi> {
     @Override
     public int compareTo(Tamagotchi t) {
         return this.id.compareTo(t.id);
+    }
+
+    public boolean tryToBeam(){
+        if (healthPoints >= maxHealthPoints/0.5){
+            healthPoints = (int)( healthPoints * 0.75);
+            return true;
+        } else {
+            return false;
+        }
     }
 
 }

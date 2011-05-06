@@ -21,7 +21,6 @@ public class FoodManager extends Thread {
 		synchronized (foodList) {
                     for (Food tmpFood : foodList) {
                         if (!tmpFood.checkState()){
-                            //löschen
                             foodList.remove(tmpFood);
                             logik.delFood(tmpFood.getFieldX(), tmpFood.getFieldY());
                         }

@@ -16,12 +16,6 @@ public class FoodCreator extends Thread {
         this.logik = logik;
     }
 
-    public FoodCreator(int pxX, int pxY, FoodManager foodMngr) {
-            this.fieldsX = pxX;
-            this.fieldsY = pxY;
-            this.foodMngr = foodMngr;
-    }
-
     @Override
     public void run() {
             while (true) {
@@ -31,7 +25,7 @@ public class FoodCreator extends Thread {
                                 int posX = (int)(fieldsX * Math.random());
                                 int posY = (int)(fieldsY * Math.random());
     // TODO Wertebereich festlegen und randomisieren
-                                int Value = (int)(100*Math.random());
+                                double Value = 1 + Math.random();
                                 long TTL = 100000;
                                 long MHD = 30000;
                                 tmpFood = new Food(Value, TTL, MHD, posX, posY);

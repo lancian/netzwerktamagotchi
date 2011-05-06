@@ -41,8 +41,8 @@ public class TamagotchiManager extends Thread {
                         logik.setLifepoints(tmpTama.getHealthPoints(), tmpTama.getId());
                         logik.delFood(tmpFood.getFieldX(), tmpFood.getFieldY());
                     } else {
-                        logik.killTamagotchi(id);
                         tamaList.remove(search);
+                        logik.killTamagotchi(id);
                     }
                 }
             }
@@ -53,13 +53,31 @@ public class TamagotchiManager extends Thread {
     public void run(){
         synchronized(tamaList){
             for (Tamagotchi tama : tamaList) {
-                tama.setHealthPoints((int)(tama.getHealthPoints()*0.9));
-                logik.setLifepoints(tama.getHealthPoints(), tama.getId());
+                if (!tama.setHealthPoints((int)(tama.getHealthPoints()*0.9))){
+                    tamaList.remove(tama);
+                    logik.killTamagotchi(tama.getId());
+                } else {
+                    logik.setLifepoints(tama.getHealthPoints(), tama.getId());
+                }
             }
         }
         try {
             sleep(10000);
         } catch (InterruptedException ex) { }
+    }
+
+    public void tryToBeam(String id){
+        synchronized(tamaList){
+            int search = Collections.binarySearch(tamaList, new Tamagotchi(id));
+            if (search != -1 ){
+                Tamagotchi tmpTama = tamaList.get(search);
+                if ( tmpTama.tryToBeam() ){
+                    logik.setLifepoints(tmpTama.getHealthPoints(), tmpTama.getId());
+                    logik.beamTamagotchi(tmpTama);
+                    tamaList.remove(search);
+                }
+            }
+        }
     }
 
 }

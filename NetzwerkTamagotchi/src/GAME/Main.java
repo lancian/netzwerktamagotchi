@@ -98,4 +98,15 @@ public static void main(String args[]) {
 //        tamaMngr.addTamagotchi(tama);
         spielGui.setTamagotchi(tama.getId());
     }
+
+    @Override
+    public void tryToBeam(String index) {
+        tamaMngr.tryToBeam(index);
+    }
+
+    @Override
+    public void beamTamagotchi(Tamagotchi tama) {
+        //TODO an Netzwerk übergeben
+        spielGui.beamTamagotchi(tama.getId());
+    }
 }

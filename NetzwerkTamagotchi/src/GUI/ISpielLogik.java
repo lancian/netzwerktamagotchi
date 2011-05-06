@@ -1,8 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package GUI;
 
 import GAME.Tamagotchi;
@@ -20,4 +15,6 @@ public interface ISpielLogik {
     public void delFood(int x, int y);
     public void killTamagotchi(String index);
     public void setTamagotchi(Tamagotchi tama);
+    public void tryToBeam(String index);
+    public void beamTamagotchi(Tamagotchi tama);
 }
