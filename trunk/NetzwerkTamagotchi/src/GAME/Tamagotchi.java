@@ -6,7 +6,7 @@ public class Tamagotchi implements Comparable<Tamagotchi> {
 
     //TODO to be defined
     private int healthPoints = 250;
-    private int maxHealthPoints = 100;
+    private int maxHealthPoints = 1000;
 
     public int getHealthPoints() {
             return healthPoints;
@@ -57,7 +57,7 @@ public class Tamagotchi implements Comparable<Tamagotchi> {
                 return false;
         } else {
                 Tamagotchi tmp = (Tamagotchi) obj;
-                return this.id == tmp.id;
+                return this.id.equals(tmp.id);
         }
     }
 
